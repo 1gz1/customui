@@ -1,6 +1,10 @@
-from .app import *
-from .systheme import *
+from app import *
+from systheme import *
+from tktheme import *
+import time
 
+__all__ = ["app", "systheme", "tktheme"]
 
-__all__ = ["app","CreateApp","systheme"]
-
+print("customui package loaded.")
+time.sleep(0.3)
+print("load successful.")
