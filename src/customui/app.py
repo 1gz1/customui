@@ -20,8 +20,8 @@ class CreateApp:
         self.label = CTkLabel(self.app, text=text)
         self.label.grid(row=row, column=column)
 
-    def addButton(self, command,row,column):
-        self.button = CTkButton(self.app, command=command)
+    def addButton(self,text, command,row,column):
+        self.button = CTkButton(self.app,text=text, command=command)
         self.button.grid(row=row, column=column)
 
 # test code
@@ -32,4 +32,5 @@ if __name__ == "__main__":
     test_app = CreateApp("Test App", "1.0","1024","768")
     test_app.addLabel("Welcome to Test App!", 0, 0)
     test_app.addButton("Click Me", pt, 1, 0)
+
     test_app.run()
