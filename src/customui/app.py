@@ -1,36 +1,80 @@
-from customtkinter import *  # 导入 customtkinter 库
+from customtkinter import CTk
+from customtkinter import CTkLabel
+from customtkinter import CTkButton
+from loguru import logger as log
+
+# 配置日志系统
+log.remove()
+log.add("uidebug.log")
+log.info("应用程序日志系统已初始化")
 
 class CreateApp:
     """
     应用程序创建类，负责初始化窗口、设置标题和主循环。
     """
-    def __init__(self, app_name:str, app_version:str, hight:str, width:str):
+    def __init__(self, app_name:str, app_version:str, hight:int, width:int):
+        log.info(f"正在初始化应用程序: {app_name} v{app_version}, 尺寸: {width}x{hight}")
         # 保存应用信息到字典
         self.app_dict = {"name": app_name, "version": app_version,
-                         "hight": hight, "width": width}
-        self.app = CTk()
-        self.app.title(f"{self.app_dict['name']} v{self.app_dict['version']}")
-        # geometry 需要字符串格式 "宽x高"
-        self.app.geometry(f"{self.app_dict['hight']}x{self.app_dict['width']}")  # width x height
+                         "hight": str(hight), "width": str(width)}
+        log.debug(f"app_dict: {self.app_dict}")
+        
+        try:
+            self.app = CTk()
+            log.debug("CTk实例创建成功")
+
+            self.app.title(f"{self.app_dict['name']} v{self.app_dict['version']}")
+            log.debug(f"窗口标题已设置为: {self.app.title()}")
+
+            # geometry 需要字符串格式 "宽x高"
+            self.app.geometry(f"{self.app_dict['hight']}x{self.app_dict['width']}")  # width x height
+            log.debug(f"窗口尺寸已设置为: {self.app_dict['hight']}x{self.app_dict['width']}")
+
+        except Exception as e:
+            log.error(f"初始化应用程序时出错: {str(e)}")
+            raise
 
     def run(self):
-        self.app.mainloop()
+        log.info("正在启动应用程序主循环")
+        try:
+            self.app.mainloop()
+            log.info("应用程序主循环已结束")
+        except Exception as e:
+            log.error(f"运行应用程序时出错: {str(e)}")
+            raise
 
-    def addLabel(self, text,row,column):
-        self.label = CTkLabel(self.app, text=text)
-        self.label.grid(row=row, column=column)
+    def addLabel(self, text:str,row:int,column:int):
+        log.debug(f"正在添加标签: 文本='{text}', 位置=({row},{column})")
+        try:
+            self.label = CTkLabel(self.app, text=text)
+            self.label.grid(row=row, column=column)
+            log.debug("标签添加成功")
+        except Exception as e:
+            log.error(f"添加标签时出错: {str(e)}")
+            raise
 
-    def addButton(self,text, command,row,column):
-        self.button = CTkButton(self.app,text=text, command=command)
-        self.button.grid(row=row, column=column)
+    def addButton(self,text:str, command,row:int,column:int):
+        log.debug(f"正在添加按钮: 文本='{text}', 位置=({row},{column})")
+        try:
+            self.button = CTkButton(self.app,text=text, command=command)
+            self.button.grid(row=row, column=column)
+            log.debug("按钮添加成功")
+        except Exception as e:
+            log.error(f"添加按钮时出错: {str(e)}")
+            raise
 
 # test code
 # only run in this file , add to the github need delete lines below
 if __name__ == "__main__":
+    log.info("开始执行测试代码")
     def pt():
-        print("Button Clicked!")
-    test_app = CreateApp("Test App", "1.0","1024","768")
-    test_app.addLabel("Welcome to Test App!", 0, 0)
-    test_app.addButton("Click Me", pt, 1, 0)
-
-    test_app.run()
+        log.info("按钮被点击!")
+    try:
+        test_app = CreateApp("Test App", "1.0",600,480)
+        test_app.addLabel("Welcome to Test App!", 0, 0)
+        test_app.addButton("Click Me", pt, 1, 0)
+        test_app.run()
+    except Exception as e:
+        log.error(f"测试代码执行出错: {str(e)}")
+        raise
+    log.info("测试代码执行完成")
